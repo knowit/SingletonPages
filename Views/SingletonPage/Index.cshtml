@@ -1,0 +1,69 @@
+﻿@using EPiServer
+@using EPiServer.Core
+@using EPiServer.ServiceLocation
+@using EPiServer.Shell
+@using EPiServer.Web.Routing
+
+@model Alloy.Models.ViewModels.SingletonPage.EditViewModel
+
+@{
+    Layout = "_SingletonPageLayout.cshtml";
+    var startPageUrl = ServiceLocator.Current.GetInstance<UrlResolver>().GetUrl(ContentReference.StartPage);
+}
+
+<header>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <a href="@string.Format("{0}{1}", startPageUrl, "episerver")" target="_self">To edit-mode</a>
+            </div>
+        </div>
+    </div>
+</header>
+<section id="singleton">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <form action="/episerver/singletons/create" method="POST">
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-horizontal">
+                        <h5>Exists</h5>
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <ul>
+                            @foreach (var exists in Model.Exists)
+                            {
+                                <li>@exists.Key</li>
+                            }
+                        </ul>
+                        @if (Model.NonExisting.Count > 0)
+                        {
+                            <h5>Create required singleton</h5>
+                            @Html.DropDownListFor(m => m.CreateTypeKey, new SelectList(Model.NonExisting, "Key", "Key"))
+                            <div class="form-group">
+                                <div class=pull-left>
+                                    <input type="submit" value="Save" class="btn btn-default" />
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <p>All the required singletons exists</p>
+                        }
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    #singleton {
+        background-color: floralwhite;
+        padding: 10px;
+    }
+     input[type=submit] {
+         margin: 10px 0 0 0;
+     }
+</style>
