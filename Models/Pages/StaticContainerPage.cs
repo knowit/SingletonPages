@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Alloy.Business.Rendering;
 
 namespace Alloy.Models.Pages
 {
-    [SiteContentType(GroupName = Global.GroupNames.Singletons)]
-    public class StaticContainerPage : SitePageData
+    public class StaticContainerPage : ContainerPage
     {
-
     }
 }
